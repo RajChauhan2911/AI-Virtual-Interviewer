@@ -1,0 +1,59 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Profile collection rules
+    match /profiles/{userId} {
+      // Users can read and write only their own profile
+      allow read, write: if isOwner(userId);
+      
+      // Prevent users from changing their userId
+      allow update: if isOwner(userId) && 
+                      (!('userId' in request.resource.data) || 
+                       request.resource.data.userId == userId);
+    }
+    
+    // Interview results collection (if needed)
+    match /interviews/{interviewId} {
+      // Users can read and write their own interview results
+      allow read, write: if isAuthenticated() && 
+                           request.auth.uid == resource.data.userId;
+      allow create: if isAuthenticated() && 
+                      request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Resume analyzer results (if needed)
+    match /resumes/{resumeId} {
+      // Users can read and write their own resume analysis
+      allow read, write: if isAuthenticated() && 
+                           request.auth.uid == resource.data.userId;
+      allow create: if isAuthenticated() && 
+                      request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Aptitude test results (if needed)
+    match /aptitude-tests/{testId} {
+      // Users can read and write their own test results
+      allow read, write: if isAuthenticated() && 
+                           request.auth.uid == resource.data.userId;
+      allow create: if isAuthenticated() && 
+                      request.auth.uid == request.resource.data.userId;
+    }
+    
+    // Default deny all other access
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

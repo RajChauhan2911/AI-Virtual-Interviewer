@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "your-firebase-project-id",
+    "prod": "ai-interviewer-b7b94"
+  },
+  "targets": {},
+  "etags": {}
+}
