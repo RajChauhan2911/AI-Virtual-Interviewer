@@ -29,7 +29,7 @@ License
 
 🎯 Overview
 
-AI Virtual Interviewer is a comprehensive web application designed to help job seekers prepare for interviews through AI-powered mock interviews, resume analysis, and aptitude testing. The platform provides real-time feedback, performance analytics, and personalized improvement recommendations.
+AI Virtual Interviewer is a comprehensive web application designed to help job seekers prepare for interviews through intelligent mock interviews, resume analysis, and aptitude testing. The platform provides real-time feedback, performance analytics, and personalized improvement recommendations.
 
 Key Objectives
 
@@ -279,7 +279,7 @@ Fork, branch, commit, push, open PR.
 
 📈 Future Enhancements
 
-Voice-to-text responses, video simulation, AI-powered interview coach, mobile app, advanced analytics, etc.
+Voice-to-text responses, video simulation, intelligent interview coach, mobile app, advanced analytics, etc.
 
 📝 License
 

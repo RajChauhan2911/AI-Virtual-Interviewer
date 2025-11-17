@@ -232,7 +232,7 @@ const Dashboard = () => {
   const quickActions = [
     {
       title: "Start New Interview",
-      description: "Practice with AI-powered interview simulation",
+      description: "Practice with intelligent interview simulation",
       icon: Target,
       color: "bg-primary",
       action: "Start Interview",

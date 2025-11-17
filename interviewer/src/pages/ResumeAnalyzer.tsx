@@ -287,7 +287,7 @@ For more career guidance, visit our platform
       <div className="text-center space-y-4">
         <h1 className="text-4xl font-bold text-gradient">Resume Analyzer</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Get instant feedback on your resume with AI-powered analysis. Improve your chances of getting noticed by employers.
+          Get instant feedback on your resume with intelligent rule-based analysis. Improve your chances of getting noticed by employers.
         </p>
       </div>
 

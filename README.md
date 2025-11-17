@@ -1,6 +1,6 @@
 # 🎯 AI Virtual Hire Coach - Complete Documentation
 
-> **Comprehensive interview preparation platform with AI-powered mock interviews, resume analysis, and aptitude testing**
+> **Comprehensive interview preparation platform with intelligent mock interviews, resume analysis, and aptitude testing**
 
 [![Status](https://img.shields.io/badge/Status-Production%20Ready-success)]()
 [![License](https://img.shields.io/badge/License-MIT-blue)]()
@@ -27,17 +27,17 @@
 
 ## 🎯 Overview
 
-AI Virtual Hire Coach is a full-stack AI-powered interview preparation platform that helps job seekers:
+AI Virtual Hire Coach is a full-stack intelligent interview preparation platform that helps job seekers:
 
-- 🎤 **Practice Mock Interviews** - AI-driven interview simulation
-- 📄 **Analyze Resumes** - Comprehensive AI-powered resume analysis with ratings (0-100)
+- 🎤 **Practice Mock Interviews** - Intelligent interview simulation
+- 📄 **Analyze Resumes** - Comprehensive rule-based resume analysis with ratings (0-100)
 - 🧠 **Take Aptitude Tests** - Company-specific and skill-based assessments
 - 📊 **Track Progress** - Detailed analytics and performance insights
 - 📈 **Improve Skills** - Personalized recommendations and action plans
 
 ### Key Objectives
 
-- Simulate realistic interview scenarios using AI
+- Simulate realistic interview scenarios using intelligent algorithms
 - Analyze and score resumes for ATS compatibility
 - Conduct aptitude tests for various job roles and companies
 - Track progress with detailed analytics
