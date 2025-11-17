@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+    <nav className="sticky top-0 z-50 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
@@ -68,6 +69,7 @@ const Navbar = () => {
                 <span>{item.name}</span>
               </NavLink>
             ))}
+            <ThemeToggle />
             <Button
               variant="outline"
               size="sm"
@@ -95,7 +97,7 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-card border rounded-lg mt-2 mb-2">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-card/95 border rounded-lg mt-2 mb-2 shadow-md">
               {navItems.map((item) => (
                 <NavLink
                   key={item.path}
@@ -113,17 +115,20 @@ const Navbar = () => {
                   <span>{item.name}</span>
                 </NavLink>
               ))}
-              <Button
-                variant="outline"
-                onClick={() => {
-                  handleLogout();
-                  setIsOpen(false);
-                }}
-                className="w-full mt-2 flex items-center space-x-2"
-              >
-                <LogOut className="h-5 w-5" />
-                <span>Logout</span>
-              </Button>
+              <div className="flex items-center justify-between gap-2">
+                <ThemeToggle />
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="mt-2 flex-1 flex items-center justify-center space-x-2"
+                >
+                  <LogOut className="h-5 w-5" />
+                  <span>Logout</span>
+                </Button>
+              </div>
             </div>
           </div>
         )}

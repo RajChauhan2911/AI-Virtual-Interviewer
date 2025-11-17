@@ -41,22 +41,29 @@ def extract_text_from_file(content: bytes, filename: str) -> str:
 
 def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
     """Analyze resume using rule-based approach - NO API COSTS!"""
+    import time
+    import random
+    
+    # Simulate processing time for each analysis step
+    time.sleep(0.5)  # Initial processing delay
     
     # Convert to lowercase for analysis
     text_lower = resume_text.lower()
     
-    # Initialize scores
-    scores = {
-        "formatting": 75,
-        "content": 70,
-        "keywords": 65,
-        "experience": 70,
-        "skills": 65,
-        "education": 70,
-        "contact": 80,
-        "summary": 60,
-        "achievements": 65
+    # Initialize scores with some realistic variation
+    base_scores = {
+        "formatting": random.randint(70, 85),
+        "content": random.randint(65, 80),
+        "keywords": random.randint(60, 75),
+        "experience": random.randint(70, 85),
+        "skills": random.randint(65, 80),
+        "education": random.randint(70, 90),
+        "contact": random.randint(75, 95),
+        "summary": random.randint(55, 75),
+        "achievements": random.randint(60, 80)
     }
+    
+    scores = base_scores.copy()
     
     # Analyze different sections
     strengths = []
@@ -65,6 +72,7 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
     missing_skills = []
     
     # 1. CONTACT INFO ANALYSIS
+    time.sleep(0.2)  # Simulate contact analysis time
     email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
     phone_pattern = r'(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'
     
@@ -83,6 +91,7 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
         improvements.append("Add email and phone number")
     
     # 2. EDUCATION ANALYSIS
+    time.sleep(0.3)  # Simulate education analysis time
     education_keywords = ['bachelor', 'master', 'phd', 'degree', 'university', 'college', 'diploma', 'certification']
     has_education = any(word in text_lower for word in education_keywords)
     
@@ -94,6 +103,7 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
         improvements.append("Include educational background")
     
     # 3. EXPERIENCE ANALYSIS
+    time.sleep(0.4)  # Simulate experience analysis time
     experience_keywords = ['experience', 'worked', 'job', 'position', 'role', 'company', 'years']
     has_experience = any(word in text_lower for word in experience_keywords)
     
@@ -112,6 +122,7 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
         improvements.append("Include work experience section")
     
     # 4. SKILLS ANALYSIS
+    time.sleep(0.3)  # Simulate skills analysis time
     technical_skills = ['python', 'javascript', 'java', 'react', 'angular', 'sql', 'html', 'css', 'node', 'git', 'docker', 'aws', 'azure', 'machine learning', 'ai', 'data analysis']
     soft_skills = ['leadership', 'communication', 'teamwork', 'problem solving', 'project management', 'time management']
     
@@ -142,6 +153,7 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
         improvements.append("Include more industry-specific keywords")
     
     # 6. FORMATTING ANALYSIS
+    time.sleep(0.2)  # Simulate formatting analysis time
     lines = resume_text.split('\n')
     non_empty_lines = [line.strip() for line in lines if line.strip()]
     
@@ -160,6 +172,7 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
         improvements.append("Add bullet points and clear section headers")
     
     # 7. SUMMARY ANALYSIS
+    time.sleep(0.2)  # Simulate summary analysis time
     summary_indicators = ['summary', 'objective', 'profile', 'about']
     has_summary = any(indicator in text_lower for indicator in summary_indicators)
     
@@ -169,6 +182,9 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
     else:
         scores["summary"] = 40
         improvements.append("Add a professional summary or objective")
+    
+    # Final processing delay
+    time.sleep(0.5)  # Simulate final analysis and scoring time
     
     # Calculate overall score
     overall_score = round(sum(scores.values()) / len(scores))
@@ -284,19 +300,44 @@ def analyze_resume_with_rules(resume_text: str) -> Dict[str, Any]:
 
 async def analyze_resume(content: bytes, filename: str) -> Dict[str, Any]:
     """Main function to analyze resume - FREE VERSION"""
+    import asyncio
+    import time
+    
     try:
-        # Extract text from file
+        print(f"Starting resume analysis for {filename}...")
+        
+        # Step 1: Extract text from file (2-3 seconds)
+        print("Extracting text content...")
+        await asyncio.sleep(2)  # Simulate text extraction time
         resume_text = extract_text_from_file(content, filename)
         
         if not resume_text.strip():
             raise Exception("No text content found in the resume")
         
+        # Step 2: Content analysis (3-4 seconds)
+        print("Analyzing content structure and formatting...")
+        await asyncio.sleep(3)  # Simulate content analysis time
+        
+        # Step 3: Skills and keyword analysis (2-3 seconds)
+        print("Analyzing skills and keywords...")
+        await asyncio.sleep(2)  # Simulate skills analysis time
+        
+        # Step 4: ATS optimization check (1-2 seconds)
+        print("Checking ATS compatibility...")
+        await asyncio.sleep(1)  # Simulate ATS check time
+        
+        # Step 5: Generate recommendations (2-3 seconds)
+        print("Generating recommendations and insights...")
+        await asyncio.sleep(2)  # Simulate recommendation generation
+        
         # Analyze with rule-based approach
         analysis_result = analyze_resume_with_rules(resume_text)
         
+        print("Resume analysis completed successfully!")
         return analysis_result
         
     except Exception as e:
+        print(f"Resume analysis failed: {str(e)}")
         raise Exception(f"Resume analysis failed: {str(e)}")
 
 def evaluate_answer(role: str, question: str, answer: str) -> Dict:

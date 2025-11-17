@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Upload, FileText, CheckCircle, AlertCircle, TrendingUp, Eye, Download, Star, Target, Lightbulb, Award, BookOpen, Briefcase, Users, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { parseFileToText, analyzeResume as analyzeLocal, generatePDFReport, getAnalysisDiagnostics, uploadDiagnosticsIfDev } from '@/lib/resumeAnalyzer';
 import { useToast } from '@/hooks/use-toast';
 
 interface AnalysisResult {
@@ -56,7 +57,7 @@ const ResumeAnalyzer = () => {
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file && (file.type === 'application/pdf' || file.name.endsWith('.docx'))) {
+    if (file && (file.name.match(/\.(pdf|docx|doc|txt)$/i))) {
       setUploadedFile(file);
       analyzeResume(file);
     }
@@ -66,23 +67,54 @@ const ResumeAnalyzer = () => {
     setIsAnalyzing(true);
     
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await fetch('http://127.0.0.1:8000/api/resume/analyze', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Analysis failed');
-      }
-      
-      const result = await response.json();
-      setAnalysis(result.analysis);
-      setAnalysisId(result.analysisId);
-      
+      const text = await parseFileToText(file);
+      const res = analyzeLocal(text);
+      // Transform minimal fields into existing UI structure
+      const transformed: AnalysisResult = {
+        overallScore: res.score,
+        strengths: res.strengths,
+        improvements: res.weaknesses,
+        sections: {
+          formatting: Math.min(100, (Object.keys(res.matchedRules).length > 0 ? 70 : 40)),
+          content: Math.min(100, res.recommendations.length > 0 ? 65 : 80),
+          keywords: Math.min(100, (res.matchedRules.skills?.sectionMatched || 0) * 4),
+          experience: 50,
+          skills: 50,
+          education: 40,
+          contact: 60,
+          summary: 50,
+          achievements: Math.min(100, (res.matchedRules.achievements?.sectionMatched || 0) * 8),
+        },
+        atsScore: Math.min(100, res.score + 10),
+        recommendations: res.recommendations,
+        skillAnalysis: {
+          currentSkills: (res.matchedRules.skills?.matchedKeywords || []).map(s => s.split('x')[0]).slice(0, 12),
+          missingSkills: [],
+          skillGaps: [],
+          skillSuggestions: res.recommendations.slice(0, 5),
+        },
+        formatAnalysis: {
+          currentFormat: 'Standard resume format',
+          suggestedFormat: 'Chronological with quantified bullets',
+          formatIssues: [],
+          formatImprovements: ['Use consistent headers', 'Add bullet-point achievements with metrics'],
+        },
+        industryInsights: {
+          industry: 'Software Engineering',
+          marketTrends: ['Full-stack demand', 'Cloud-native architectures'],
+          salaryInsights: 'Competitive market; quantify impact to stand out.',
+          growthOpportunities: ['Backend optimization', 'Kubernetes', 'Observability'],
+        },
+        detailedReport: {
+          executiveSummary: `Score ${res.score}/100. ${res.strengths[0] || ''}`.trim(),
+          keyFindings: [...res.strengths.slice(0, 3), ...res.weaknesses.slice(0, 2)],
+          actionPlan: res.recommendations.slice(0, 5),
+          priorityActions: res.recommendations.slice(0, 3),
+        },
+      };
+      setAnalysis(transformed);
+      setAnalysisId(null);
+      await uploadDiagnosticsIfDev({ filename: file.name });
       toast({
         title: "Success!",
         description: "Resume analysis completed successfully!",
@@ -127,20 +159,15 @@ const ResumeAnalyzer = () => {
     if (!analysis) return;
 
     try {
-      // Send analysis data to backend for PDF generation
-      const response = await fetch('http://127.0.0.1:8000/api/resume/analysis/pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(analysis),
-      });
-
-      if (!response.ok) {
-        throw new Error('PDF generation failed');
-      }
-
-      const blob = await response.blob();
+      const pdfBytes = await generatePDFReport({
+        score: analysis.overallScore,
+        strengths: analysis.strengths,
+        weaknesses: analysis.improvements,
+        recommendations: analysis.recommendations,
+        matchedRules: {},
+      }, { name: 'Unknown' });
+      const ab = (pdfBytes.buffer as ArrayBuffer).slice(0);
+      const blob = new Blob([ab], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -285,7 +312,7 @@ For more career guidance, visit our platform
             <input
               ref={fileInputRef}
               type="file"
-              accept=".pdf,.docx"
+              accept=".pdf,.docx,.doc,.txt"
               onChange={handleFileUpload}
               className="hidden"
             />
