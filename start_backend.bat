@@ -34,7 +34,6 @@ echo Backend API: http://localhost:8000
 echo API Documentation: http://localhost:8000/docs
 echo.
 echo NOTE: Firebase credentials may cause warnings but the server should still work
-echo       if you have your OpenAI API key configured in .env
 echo.
 echo Press Ctrl+C to stop the server
 echo ================================================

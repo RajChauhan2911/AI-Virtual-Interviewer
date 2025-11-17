@@ -20,14 +20,8 @@ echo.
 echo Please enter your configuration details:
 echo.
 
-REM Get OpenAI API Key
-set /p OPENAI_KEY="Enter your OpenAI API Key: "
-
 REM Create .env file
-echo # OpenAI API Configuration> .env
-echo OPENAI_API_KEY=%OPENAI_KEY%>> .env
-echo.>> .env
-echo # CORS Configuration>> .env
+echo # CORS Configuration> .env
 echo CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173>> .env
 echo.>> .env
 echo # Firebase Admin SDK>> .env

@@ -52,7 +52,6 @@ AI Virtual Hire Coach is a full-stack AI-powered interview preparation platform 
 - **Python 3.8+** - Backend runtime
 - **Node.js 16+** - Frontend runtime
 - **Firebase Project** - Authentication & database
-- **OpenAI API Key** - For resume analysis ([Get one here](https://platform.openai.com/api-keys))
 
 ### 3-Step Setup
 
@@ -63,8 +62,7 @@ AI Virtual Hire Coach is a full-stack AI-powered interview preparation platform 
 pip install -r requirements.txt
 
 # Create .env file
-echo OPENAI_API_KEY=your_openai_api_key_here > .env
-echo CORS_ORIGINS=http://localhost:5173 >> .env
+echo CORS_ORIGINS=http://localhost:5173 > .env
 
 # Start backend server
 python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
@@ -121,9 +119,9 @@ start.bat
 - Industry-specific question banks
 - Voice input support (planned)
 
-### 📄 Resume Analysis (AI-Powered)
+### 📄 Resume Analysis (Rule-Based)
 
-**Uses OpenAI GPT-4o for comprehensive analysis:**
+**Uses intelligent rule-based analysis for comprehensive evaluation:**
 
 | Feature | Description | Score Range |
 |---------|-------------|-------------|
@@ -148,10 +146,6 @@ start.bat
 7. **Contact** - Contact information completeness
 8. **Summary** - Professional summary effectiveness
 9. **Achievements** - Quantifiable accomplishments
-
-**Cost Per Analysis:**
-- GPT-4o: ~$0.12 per resume (best quality)
-- GPT-3.5-Turbo: ~$0.01 per resume (budget option)
 
 ### 🧠 Aptitude Tests
 
@@ -231,7 +225,6 @@ start.bat
 | Technology | Version | Purpose |
 |------------|---------|---------|
 | **FastAPI** | Latest | Modern Python web framework |
-| **OpenAI** | 2.2.0+ | AI analysis engine (GPT-4o) |
 | **PyPDF2** | 3.0.1 | PDF text extraction |
 | **python-docx** | 1.1.0 | DOCX text extraction |
 | **ReportLab** | 4.0.7 | PDF report generation |
@@ -282,7 +275,6 @@ pip install -r requirements.txt
 
 # Create .env file (or run setup_env.bat on Windows)
 cat > .env << EOF
-OPENAI_API_KEY=your_openai_api_key_here
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 GOOGLE_APPLICATION_CREDENTIALS=firebase-service-account.json
 EOF
@@ -440,17 +432,6 @@ GET    /api/resume/analyses             # List all user analyses
 GET    /api/resume/analysis/{id}/pdf    # Download PDF report
 ```
 
-### Cost Analysis
-
-**Monthly Estimates (GPT-4o at ~$0.12/analysis):**
-- 100 analyses: $12
-- 500 analyses: $60
-- 1,000 analyses: $120
-
-**To reduce costs, switch to GPT-3.5-Turbo** in `services/ai.py`:
-```python
-model="gpt-3.5-turbo"  # ~$0.01 per analysis (90% cost reduction)
-```
 
 ---
 
@@ -572,7 +553,7 @@ virtua-hire-coach-main/
 │   └── schemas.py                    # Pydantic data models
 │
 ├── services/
-│   ├── ai.py                        # OpenAI integration (GPT-4o)
+│   ├── ai.py                        # Rule-based resume analysis
 │   ├── auth.py                      # Firebase authentication
 │   ├── db.py                        # Firestore database operations
 │   ├── pdf_generator.py             # PDF report generation
@@ -707,7 +688,6 @@ netlify deploy --prod
 pip install -r requirements.txt
 
 # Set up environment variables
-export OPENAI_API_KEY=your_key
 export CORS_ORIGINS=https://yourdomain.com
 
 # Run with gunicorn for production
@@ -734,7 +714,6 @@ netlify deploy --prod --dir=dist
 
 **Backend (.env):**
 ```env
-OPENAI_API_KEY=your_production_openai_key
 CORS_ORIGINS=https://yourdomain.com
 GOOGLE_APPLICATION_CREDENTIALS=path/to/firebase-admin.json
 ```
@@ -775,11 +754,6 @@ firebase deploy
 pip install -r requirements.txt
 ```
 
-**Error:** "OpenAI API key not found"
-```bash
-# Solution: Check .env file
-cat .env  # Should show OPENAI_API_KEY=sk-...
-```
 
 **Error:** "Port already in use"
 ```bash
@@ -814,9 +788,9 @@ npm install
 
 **Error:** "Analysis failed"
 ```bash
-# Check OpenAI API key is valid
 # Check file format (PDF or DOCX only)
 # Check file size (max 10MB)
+# Ensure resume contains readable text content
 ```
 
 **Error:** "PDF download failed"
@@ -867,8 +841,8 @@ pip install reportlab
 python -m uvicorn main:app --reload --log-level debug
 
 # Check backend logs for errors
-# Look for OpenAI API errors
 # Check Firebase connection
+# Verify file processing libraries are installed
 ```
 
 **Frontend:**
@@ -1009,7 +983,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Special thanks to:
 
-- **[OpenAI](https://openai.com)** - GPT-4o API for AI analysis
 - **[Shadcn/ui](https://ui.shadcn.com)** - Beautiful component library
 - **[Radix UI](https://www.radix-ui.com)** - Accessible UI primitives
 - **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework
@@ -1041,7 +1014,7 @@ For issues, questions, or suggestions:
 ### What's Working
 
 - ✅ User authentication (Email/Password + Phone OTP)
-- ✅ Resume analysis with OpenAI GPT-4o
+- ✅ Resume analysis with rule-based intelligence
 - ✅ 37 aptitude tests (company + skill-based)
 - ✅ Real-time dashboard with analytics
 - ✅ PDF report generation
@@ -1084,4 +1057,4 @@ cd interviewer && npm run dev
 
 ---
 
-**Made with ❤️ using OpenAI GPT-4o, FastAPI, React, TypeScript, and Firebase**
+**Made with ❤️ using FastAPI, React, TypeScript, and Firebase**
